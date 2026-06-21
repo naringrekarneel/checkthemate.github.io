@@ -1,4 +1,5 @@
 # ♚ Check the Mate
+[![Live Demo](https://img.shields.io/badge/Live-Demo-green)](https://yourusername.github.io/portfolio)
 
 **Check the Mate** is a beautifully crafted, highly intuitive Chess Companion App meticulously designed to elevate the traditional over-the-board chess experience for players of all skill levels. By seamlessly merging the robust functionality of a professional tournament chess timer with an automated material advantage tracker, this application completely eliminates the need for clunky physical clocks and tedious mental math. Instead, it empowers you to focus entirely on your strategy, board vision, and gameplay.
 
