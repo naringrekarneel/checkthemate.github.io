@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Advantage Tracker</title>
+    <!-- Google Fonts: Inter & Cinzel (Premium Serif) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Cinzel:wght@600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti for physics-based celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- Theme Toggle (Bottom Left Corner) -->
+        <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme">
+            <i class="fa-solid fa-sun"></i>
+        </button>
+
+        <!-- Branding / Logo -->
+        <header class="brand-header">
+            <div class="logo-container">
+                <img src="logo.png" alt="Logo" class="main-logo" id="main-logo" onerror="this.style.display='none'">
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main class="dashboard">
+            
+            <!-- Player A (White) Panel -->
+            <section class="player-panel left-panel">
+                <div class="player-identity">
+                    <div class="player-avatar white-player large-avatar">
+                        <i class="fa-solid fa-chess-king"></i>
+                    </div>
+                    <h2 class="player-name white-player" id="white-name-display" contenteditable="true" spellcheck="false">PLAYER 1</h2>
+                    <div class="player-clock" id="white-clock">--:--</div>
+                </div>
+                <div class="captured-pieces white-captures" id="white-captured">
+                    <!-- White's captured pieces appear here -->
+                </div>
+            </section>
+
+            <!-- Central Advantage Bar -->
+            <section class="advantage-center">
+                <div class="vs-badge">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div class="advantage-track">
+                    <div class="advantage-fill white-fill" id="white-fill"></div>
+                    <div class="advantage-fill black-fill" id="black-fill"></div>
+                    <div class="center-marker"></div>
+                </div>
+                <div class="advantage-indicator">
+                    <span id="advantage-value">0</span>
+                </div>
+            </section>
+
+            <!-- Player B (Black) Panel -->
+            <section class="player-panel right-panel">
+                <div class="player-identity">
+                    <div class="player-avatar black-player large-avatar">
+                        <i class="fa-solid fa-chess-king"></i>
+                    </div>
+                    <h2 class="player-name black-player" id="black-name-display" contenteditable="true" spellcheck="false">PLAYER 2</h2>
+                    <div class="player-clock" id="black-clock">--:--</div>
+                </div>
+                <div class="captured-pieces black-captures" id="black-captured">
+                    <!-- Black's captured pieces appear here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Floating Control Bar -->
+        <div class="dual-controls-wrapper">
+            <!-- White Controls (White capturing pieces) -->
+            <nav class="capture-controls white-controls">
+                <button class="capture-btn white-action" data-player="white" data-piece="pawn" data-value="1">
+                    <i class="fa-solid fa-chess-pawn"></i>
+                </button>
+                <button class="capture-btn white-action" data-player="white" data-piece="knight" data-value="3">
+                    <i class="fa-solid fa-chess-knight"></i>
+                </button>
+                <button class="capture-btn white-action" data-player="white" data-piece="bishop" data-value="3">
+                    <i class="fa-solid fa-chess-bishop"></i>
+                </button>
+                <button class="capture-btn white-action" data-player="white" data-piece="rook" data-value="5">
+                    <i class="fa-solid fa-chess-rook"></i>
+                </button>
+                <button class="capture-btn white-action" data-player="white" data-piece="queen" data-value="9" title="Capture Queen (+9)">
+                    <i class="fa-solid fa-chess-queen"></i>
+                </button>
+                <div class="promotion-container">
+                    <button class="capture-btn promote-trigger" title="Promote Pawn">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <div class="promotion-menu">
+                        <button class="capture-btn white-action" data-player="white" data-piece="promo-queen" data-value="8" title="Promote to Queen (+8)"><i class="fa-solid fa-chess-queen"></i></button>
+                        <button class="capture-btn white-action" data-player="white" data-piece="promo-rook" data-value="4" title="Promote to Rook (+4)"><i class="fa-solid fa-chess-rook"></i></button>
+                        <button class="capture-btn white-action" data-player="white" data-piece="promo-bishop" data-value="2" title="Promote to Bishop (+2)"><i class="fa-solid fa-chess-bishop"></i></button>
+                        <button class="capture-btn white-action" data-player="white" data-piece="promo-knight" data-value="2" title="Promote to Knight (+2)"><i class="fa-solid fa-chess-knight"></i></button>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Center Actions -->
+            <div class="center-actions">
+                <button class="reset-btn" id="reset-btn" title="Reset Game">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+
+            <!-- Black Controls (Black capturing pieces) -->
+            <nav class="capture-controls black-controls">
+                <button class="capture-btn black-action" data-player="black" data-piece="pawn" data-value="1">
+                    <i class="fa-solid fa-chess-pawn"></i>
+                </button>
+                <button class="capture-btn black-action" data-player="black" data-piece="knight" data-value="3">
+                    <i class="fa-solid fa-chess-knight"></i>
+                </button>
+                <button class="capture-btn black-action" data-player="black" data-piece="bishop" data-value="3">
+                    <i class="fa-solid fa-chess-bishop"></i>
+                </button>
+                <button class="capture-btn black-action" data-player="black" data-piece="rook" data-value="5">
+                    <i class="fa-solid fa-chess-rook"></i>
+                </button>
+                <button class="capture-btn black-action" data-player="black" data-piece="queen" data-value="9" title="Capture Queen (+9)">
+                    <i class="fa-solid fa-chess-queen"></i>
+                </button>
+                <div class="promotion-container">
+                    <button class="capture-btn promote-trigger" title="Promote Pawn">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <div class="promotion-menu">
+                        <button class="capture-btn black-action" data-player="black" data-piece="promo-queen" data-value="8" title="Promote to Queen (+8)"><i class="fa-solid fa-chess-queen"></i></button>
+                        <button class="capture-btn black-action" data-player="black" data-piece="promo-rook" data-value="4" title="Promote to Rook (+4)"><i class="fa-solid fa-chess-rook"></i></button>
+                        <button class="capture-btn black-action" data-player="black" data-piece="promo-bishop" data-value="2" title="Promote to Bishop (+2)"><i class="fa-solid fa-chess-bishop"></i></button>
+                        <button class="capture-btn black-action" data-player="black" data-piece="promo-knight" data-value="2" title="Promote to Knight (+2)"><i class="fa-solid fa-chess-knight"></i></button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+    </div>
+
+    <!-- Timer Selection Overlay -->
+    <div id="timer-overlay" class="timer-overlay">
+        <h2>GAME SETUP</h2>
+        
+        <div class="player-setup-container">
+            <div class="player-input-group">
+                <div class="input-avatar white-avatar">
+                    <i class="fa-solid fa-chess-king"></i>
+                </div>
+                <input type="text" id="setup-player-white" class="setup-input" placeholder="PLAYER 1" autocomplete="off" spellcheck="false" value="PLAYER 1">
+            </div>
+            <div class="player-input-group">
+                <div class="input-avatar black-avatar">
+                    <i class="fa-solid fa-chess-king"></i>
+                </div>
+                <input type="text" id="setup-player-black" class="setup-input" placeholder="PLAYER 2" autocomplete="off" spellcheck="false" value="PLAYER 2">
+            </div>
+        </div>
+
+        <h3 class="setup-subtitle">SELECT TIME CONTROL</h3>
+        <div class="timer-grid">
+            <button class="timer-option" data-seconds="15">
+                <i class="fa-solid fa-forward-fast"></i>
+                <span>15 SEC</span>
+            </button>
+            <button class="timer-option" data-seconds="300">
+                <i class="fa-solid fa-bolt"></i>
+                <span>5 MIN</span>
+            </button>
+            <button class="timer-option" data-seconds="600">
+                <i class="fa-solid fa-stopwatch"></i>
+                <span>10 MIN</span>
+            </button>
+            <button class="timer-option" data-seconds="900">
+                <i class="fa-solid fa-hourglass-half"></i>
+                <span>15 MIN</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Radial Menu Overlay -->
+    <div id="radial-menu" class="radial-menu">
+        <div class="radial-center" id="radial-center">
+            <!-- Radial items injected dynamically by JS -->
+        </div>
+    </div>
+
+    <!-- Central Elimination Popup Wrapper -->
+    <div class="popup-wrapper">
+        <div id="central-popup" class="central-popup">
+            <i class="fa-solid fa-chess"></i>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Grand Victory Overlay -->
+    <div id="victory-overlay" class="victory-overlay hidden">
+        <div class="victory-window">
+            <h1 id="victory-title">CONGRATULATIONS!</h1>
+            <h2 id="victory-subtitle">PLAYER 1 HAS WON THE GAME</h2>
+            <div class="victory-score" id="victory-score-display">+5 ADVANTAGE</div>
+            <button class="play-again-btn" id="play-again-btn">
+                <i class="fa-solid fa-rotate-right"></i> PLAY AGAIN
+            </button>
+        </div>
+    </div>
+
+    <!-- Script loaded at end for performance -->
+    <script src="script.js"></script>
+</body>
+</html>

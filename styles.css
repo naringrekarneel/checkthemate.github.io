@@ -1,0 +1,1456 @@
+/* --- CSS Variables (Design System) --- */
+:root {
+    /* Dark Theme (Default) */
+    --bg-main: linear-gradient(-45deg, #050505, #1E0D3F, #0A0A0A, #2A1555);
+    --bg-primary: #0A0A0A;
+    --bg-gradient-center: #151120;
+    --bg-surface: #121212;
+    --bg-floating: rgba(20, 20, 25, 0.7);
+    
+    --lavender-soft: #C8A2FF;
+    --lavender-neon: #B388FF;
+    --lavender-muted: #9A7BFF;
+    
+    --text-neutral: #888888;
+    --text-light: #E0E0E0;
+    --border-soft: rgba(255, 255, 255, 0.05);
+
+    /* Glows */
+    --glow-subtle: 0 0 10px rgba(179, 136, 255, 0.2);
+    --glow-strong: 0 0 20px rgba(179, 136, 255, 0.6);
+    --glow-pulse: #8c52ff;
+
+    /* Transitions */
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* --- Minimalist Entrance Animations --- */
+@keyframes fadeSlideDown {
+    0% { opacity: 0; transform: translate(-50%, -30px); }
+    100% { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes fadeExpand {
+    0% { opacity: 0; transform: scaleX(0.8) translateY(20px); }
+    100% { opacity: 1; transform: scaleX(1) translateY(0); }
+}
+
+@keyframes slideInLeft {
+    0% { opacity: 0; transform: translateX(-40px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+    0% { opacity: 0; transform: translateX(40px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+.brand-header {
+    animation: fadeSlideDown 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.advantage-center {
+    opacity: 0;
+    animation: fadeExpand 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+.left-panel {
+    opacity: 0;
+    animation: slideInLeft 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+
+.right-panel {
+    opacity: 0;
+    animation: slideInRight 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+
+[data-theme="light"] {
+    /* Light Theme */
+    --bg-main: linear-gradient(135deg, #FAFAFA 0%, #E6D9F8 50%, #D1BFF0 100%);
+    --bg-primary: #FAFAFA;
+    --bg-gradient-center: #E6D9F8;
+    --bg-surface: #ffffff;
+    --bg-panel: #ffffff;
+    --bg-floating: rgba(255, 255, 255, 0.85);
+    
+    --lavender-soft: #B388FF;
+    --lavender-neon: #7E57C2;
+    --lavender-muted: #5E35B1;
+    
+    --text-neutral: #4a4a6a;
+    --text-light: #1A1A1A;
+    --text-main: #1A1A2E;
+    --border-soft: rgba(0, 0, 0, 0.1);
+
+    /* Glows adjusted for light background */
+    --glow-subtle: 0 5px 15px rgba(126, 87, 194, 0.15);
+    --glow-strong: 0 5px 20px rgba(126, 87, 194, 0.3);
+    --glow-pulse: 0 0 25px rgba(126, 87, 194, 0.5);
+}
+
+/* --- Base Reset & Typography --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: var(--bg-main);
+    background-size: 400% 400%;
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    /* Flowing Smoke Gradient Animation */
+    animation: smokeFlow 10s ease-in-out infinite;
+}
+
+@keyframes smokeFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1200px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    position: relative;
+}
+
+/* --- Theme Toggle Button --- */
+/* Placed creatively as a floating glowing element in the top-left corner */
+.theme-toggle-btn {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    width: 50px;
+    height: 50px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-soft);
+    border-radius: 50%;
+    color: var(--lavender-neon);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 100; /* Ensure it stays above everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--glow-subtle);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.theme-toggle-btn i {
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    display: inline-block;
+}
+
+.theme-toggle-btn:hover {
+    color: var(--lavender-neon);
+    transform: scale(1.1);
+    box-shadow: var(--glow-strong);
+    border-color: var(--lavender-neon);
+}
+
+/* --- View Transitions (Circular Reveal) --- */
+.theme-transitioning::view-transition-old(root),
+.theme-transitioning::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+.theme-transitioning::view-transition-old(root) {
+    z-index: 1;
+}
+
+.theme-transitioning::view-transition-new(root) {
+    z-index: 2;
+    animation: theme-wipe 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes theme-wipe {
+    0% { clip-path: circle(0px at var(--click-x, 50%) var(--click-y, 50%)); }
+    100% { clip-path: circle(150vmax at var(--click-x, 50%) var(--click-y, 50%)); }
+}
+
+/* Temporarily disable element-level view transitions during theme wipe so they don't pop out */
+.theme-transitioning .white-player,
+.theme-transitioning .black-player,
+.theme-transitioning .advantage-track,
+.theme-transitioning .advantage-indicator,
+.theme-transitioning .white-controls,
+.theme-transitioning .black-controls,
+.theme-transitioning .reset-btn {
+    view-transition-name: none !important;
+}
+
+/* --- Branding Header --- */
+.brand-header {
+    position: absolute;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.main-logo {
+    height: 130px;
+    width: auto;
+    object-fit: contain;
+    /* In dark mode, invert the black & white image and use screen to drop the black background */
+    filter: invert(1) contrast(1.2);
+    mix-blend-mode: screen;
+}
+
+[data-theme="light"] .main-logo {
+    /* In light mode, keep normal colors and use multiply to drop the white background */
+    filter: none;
+    mix-blend-mode: multiply;
+}
+
+.brand-name {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--lavender-soft), var(--lavender-neon));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
+
+.player-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 25px rgba(179, 136, 255, 0.4);
+    transition: var(--transition-smooth);
+}
+
+.player-avatar.large-avatar {
+    width: 90px;
+    height: 90px;
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.white-player {
+    color: #ffffff !important;
+    background: #000000 !important;
+    border: 1px solid var(--border-soft);
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.black-player {
+    color: #000000 !important;
+    background: #FFFFFF !important;
+    border: 1px solid var(--border-soft);
+    text-shadow: none;
+}
+
+.player-avatar.active {
+    box-shadow: var(--glow-strong);
+    border-color: var(--lavender-neon);
+}
+
+.vs-badge {
+    color: var(--lavender-muted);
+    font-size: 1.2rem;
+    text-shadow: var(--glow-subtle);
+    opacity: 0.7;
+}
+
+/* --- Main Dashboard --- */
+.dashboard {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Left & Right Panels */
+.player-panel {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.left-panel {
+    align-items: flex-start;
+}
+
+.right-panel {
+    align-items: flex-end;
+}
+
+/* --- Player Names & Identity --- */
+.player-identity {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Forces the name to stay perfectly centered under the avatar */
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.player-avatar.large-avatar {
+    width: 90px;
+    height: 90px;
+    font-size: 3rem;
+    margin-bottom: 0; /* Margin handled by gap now */
+    flex-shrink: 0; /* Prevent squashing into ovals */
+}
+
+.player-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-main);
+    margin: 0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    outline: none;
+    border: 1px solid transparent;
+    transition: var(--transition-smooth);
+    opacity: 1;
+    text-align: center; /* Always centered text */
+    min-width: 100px;
+}
+
+:root:not([data-theme="light"]) .player-name {
+    color: #FFFFFF;
+}
+
+.player-name:hover, .player-name:focus {
+    border-color: var(--border-soft);
+    background: rgba(179, 136, 255, 0.05);
+    opacity: 1;
+}
+
+.captured-pieces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    max-width: 200px;
+    min-height: 40px;
+}
+
+.captured-pieces i {
+    font-size: 1.2rem;
+    color: #FFFFFF !important;
+    opacity: 0;
+    animation: dropIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes dropIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.1) translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.5), 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* Central Advantage Bar */
+.advantage-center {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.advantage-track {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.center-marker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.advantage-fill {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    border-radius: 10px;
+    /* Springy, highly fluid animation */
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1;
+}
+
+.white-fill {
+    left: 0;
+    transform-origin: right; /* Center of the whole track */
+    transform: scaleX(0); /* Default to 0 */
+    background: linear-gradient(90deg, transparent, var(--lavender-neon));
+    box-shadow: 5px 0 15px rgba(200, 162, 255, 0.5);
+}
+
+.black-fill {
+    right: 0;
+    transform-origin: left; /* Center of the whole track */
+    transform: scaleX(0); /* Default to 0 */
+    background: linear-gradient(270deg, transparent, var(--lavender-neon));
+    box-shadow: -5px 0 15px rgba(200, 162, 255, 0.5);
+}
+
+.advantage-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    flex-shrink: 0; /* Prevent squashing into ovals */
+    background: var(--bg-surface);
+    border: 1px solid rgba(255,255,255,0.05);
+    color: var(--lavender-soft);
+    font-size: 1.5rem;
+    font-weight: 600;
+    box-shadow: var(--glow-subtle);
+    transition: var(--transition-smooth);
+}
+
+/* --- High Contrast Overrides for Points Counter --- */
+:root:not([data-theme="light"]) .advantage-indicator {
+    background: #FFFFFF;
+    color: #000000;
+}
+
+[data-theme="light"] .advantage-indicator {
+    background: #000000;
+    color: #FFFFFF;
+}
+
+.advantage-indicator.pulse {
+    animation: glowPulse 0.5s ease-out;
+}
+
+@keyframes glowPulse {
+    0% {
+        box-shadow: var(--glow-subtle);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: var(--glow-pulse);
+        transform: scale(1.1);
+        color: #fff;
+    }
+    100% {
+        box-shadow: var(--glow-subtle);
+        transform: scale(1);
+    }
+}
+
+
+/* --- Floating Dual Controls --- */
+.dual-controls-wrapper {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 90%;
+    max-width: 800px;
+}
+
+.capture-controls {
+    display: flex;
+    padding: 0.5rem;
+    border-radius: 25px; /* Pill shape */
+    background: var(--bg-panel);
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: var(--transition-smooth);
+    justify-content: center;
+}
+
+/* Replace gap with margin for smooth width animations */
+.capture-controls > .capture-btn,
+.capture-controls > .promotion-container {
+    margin-right: 0.5rem;
+}
+.capture-controls > :last-child {
+    margin-right: 0;
+}
+
+.white-controls {
+    background: #000000;
+    border-color: var(--border-soft);
+}
+
+/* White Player controls always have white icons and white glow */
+.white-controls .capture-btn {
+    color: #FFFFFF;
+}
+
+.white-controls .capture-btn i {
+    text-shadow: none !important;
+}
+
+.black-controls {
+    background: #FFFFFF;
+    border: 1px solid #e0e0e0; /* Subtle border for light mode visibility */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.black-controls .capture-btn {
+    color: #000000;
+}
+
+.black-controls .capture-btn i {
+    text-shadow: none;
+}
+
+.center-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.capture-btn, .reset-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-neutral);
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    flex-shrink: 0; /* Prevent squashing into ovals */
+    transition: var(--transition-smooth);
+}
+
+.capture-btn i {
+    text-shadow: none !important;
+}
+
+.capture-btn:hover {
+    background: var(--border-soft);
+    color: var(--lavender-neon);
+    transform: scale(1.1);
+}
+
+.capture-btn:active {
+    transform: scale(0.85); /* Satisfying physical click depression */
+}
+
+.white-action:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+.black-action:hover {
+    color: var(--text-neutral);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transform: translateY(-2px);
+}
+
+.capture-btn:active {
+    transform: translateY(1px) scale(0.95);
+}
+
+.reset-btn:hover {
+    color: #ff5555;
+    transform: rotate(-45deg);
+}
+
+/* --- View Transition Anchors (For fluid orientation changes) --- */
+.white-player { view-transition-name: white-avatar; }
+.black-player { view-transition-name: black-avatar; }
+.advantage-track { view-transition-name: adv-track; }
+.advantage-indicator { view-transition-name: adv-ind; }
+.white-controls { view-transition-name: white-ctrl; }
+.black-controls { view-transition-name: black-ctrl; }
+.reset-btn { view-transition-name: reset-btn; }
+
+/* Kill the default crossfade so the circular theme reveal is buttery smooth */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+/* Ensure the incoming theme always paints over the old one during the reveal */
+::view-transition-new(root) {
+    z-index: 9999;
+}
+
+/* Delay element color crossfades until the 1.2s background circle finishes */
+.theme-transitioning::view-transition-old(white-avatar),
+.theme-transitioning::view-transition-old(black-avatar),
+.theme-transitioning::view-transition-old(adv-track),
+.theme-transitioning::view-transition-old(adv-ind),
+.theme-transitioning::view-transition-old(white-ctrl),
+.theme-transitioning::view-transition-old(black-ctrl),
+.theme-transitioning::view-transition-old(reset-btn) {
+    animation-name: custom-fade-out;
+    animation-duration: 0.5s;
+    animation-delay: 0.45s;
+    animation-fill-mode: both;
+}
+
+.theme-transitioning::view-transition-new(white-avatar),
+.theme-transitioning::view-transition-new(black-avatar),
+.theme-transitioning::view-transition-new(adv-track),
+.theme-transitioning::view-transition-new(adv-ind),
+.theme-transitioning::view-transition-new(white-ctrl),
+.theme-transitioning::view-transition-new(black-ctrl),
+.theme-transitioning::view-transition-new(reset-btn) {
+    animation-name: custom-fade-in;
+    animation-duration: 0.5s;
+    animation-delay: 0.45s;
+    animation-fill-mode: both;
+}
+
+@keyframes custom-fade-out {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes custom-fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* --- Force Landscape Rotation (Mobile Touch Devices Only) --- */
+#landscape-wrapper {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+@media (orientation: portrait) and (pointer: coarse) {
+    #landscape-wrapper {
+        transform: rotate(-90deg);
+        transform-origin: center center;
+        width: 100vh;
+        height: 100vw;
+        top: 50%;
+        left: 50%;
+        margin-top: -50vw;
+        margin-left: -50vh;
+        overflow: hidden;
+    }
+}
+
+/* --- Mobile Responsive (Face-to-Face Layout) --- */
+body.mobile-layout {
+    overflow: hidden !important; /* No scrolling in face-to-face mode */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    touch-action: none; /* Prevent browser gestures from cancelling touch events */
+}
+
+body.mobile-layout .app-container {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Disable Desktop Animations in Mobile Mode */
+body.mobile-layout .left-panel,
+body.mobile-layout .right-panel,
+body.mobile-layout .advantage-center,
+body.mobile-layout .brand-header {
+    animation: none !important;
+    opacity: 1 !important;
+}
+
+/* Hide the main brand header in this competitive mode to save space */
+body.mobile-layout .brand-header {
+    display: none !important;
+}
+
+/* Hide theme toggle completely in mobile layout (syncs with device theme instead) */
+body.mobile-layout .theme-toggle-btn {
+    display: none !important;
+}
+
+/* Dashboard Layout becomes the full screen */
+body.mobile-layout .dashboard {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    height: 100vh; /* Fill entire screen */
+    margin: 0;
+    flex: 1;
+    position: relative;
+}
+
+/* --- Player 2 (Black) - Top Half, Upside Down --- */
+body.mobile-layout .right-panel {
+    order: 1;
+    transform: rotate(180deg) !important;
+    flex: 1;
+    width: 100%;
+    justify-content: center; /* Centric layout */
+    align-items: center;
+    padding: 0;
+    position: relative;
+}
+
+/* --- Advantage Bar - Center --- */
+body.mobile-layout .advantage-center {
+    order: 2;
+    flex: none;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-direction: row !important; /* Make advantage bar horizontal */
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+    z-index: 50;
+    gap: 1rem;
+}
+
+/* Hide the lightning bolt icon on mobile to free up space for reset button */
+body.mobile-layout .vs-badge {
+    display: none !important;
+}
+
+body.mobile-layout .advantage-track {
+    width: 60%;
+    height: 12px;
+}
+
+body.mobile-layout .advantage-indicator {
+    position: absolute;
+    right: 5%;
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+}
+
+/* --- Player 1 (White) - Bottom Half, Right Side Up --- */
+body.mobile-layout .left-panel {
+    order: 3;
+    flex: 1;
+    width: 100%;
+    justify-content: center; /* Centric layout */
+    align-items: center;
+    padding: 0;
+    position: relative;
+}
+
+/* Adjust Player Inner Elements for Mobile */
+body.mobile-layout .player-identity {
+    flex-direction: column !important;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+body.mobile-layout .player-avatar.large-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    margin: 0;
+    touch-action: none; /* Crucial for long-press radial menu */
+}
+
+body.mobile-layout .player-name {
+    font-size: 1.2rem;
+    padding: 0.1rem 0.5rem;
+}
+
+body.mobile-layout .player-clock {
+    font-size: 2.2rem;
+}
+
+body.mobile-layout .captured-pieces {
+    justify-content: center;
+    min-height: 30px;
+}
+
+/* --- Move Controls into Respective Player Halves --- */
+body.mobile-layout .dual-controls-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Let clicks pass through empty space */
+    display: block; 
+    margin: 0;
+    padding: 0;
+    transform: none;
+}
+
+body.mobile-layout .black-controls {
+    position: absolute;
+    top: 5%; /* Inside top half */
+    left: 50%;
+    transform: translateX(-50%) rotate(180deg) !important;
+    pointer-events: auto;
+    width: 90%;
+    max-width: 350px;
+}
+
+body.mobile-layout .white-controls {
+    position: absolute;
+    bottom: 5%; /* Inside bottom half */
+    left: 50%;
+    transform: translateX(-50%) !important;
+    pointer-events: auto;
+    width: 90%;
+    max-width: 350px;
+}
+
+body.mobile-layout .center-actions {
+    position: absolute;
+    top: 50%;
+    left: 5%; /* Side of the screen */
+    transform: translateY(-50%) !important;
+    pointer-events: auto;
+    z-index: 60;
+}
+
+body.mobile-layout .capture-btn, 
+body.mobile-layout .reset-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+}
+
+/* --- Flat Aesthetic Override --- */
+/* Completely removes all glows and shadows from every element in the app */
+*, *::before, *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+/* --- Premium Smooth Reset Animation --- */
+.page-reset-anim {
+    animation: smoothReset 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    transform-origin: center center;
+}
+
+@keyframes smoothReset {
+    0% { 
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0px);
+    }
+    50% { 
+        opacity: 0;
+        transform: scale(0.95);
+        filter: blur(20px);
+    }
+    100% { 
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* Remove jarring avatar drops for a minimalist feel */
+.page-reset-anim .large-avatar i {
+    animation: none;
+}
+
+/* --- Central Elimination Popup --- */
+.popup-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.central-popup {
+    background: var(--bg-floating);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-soft);
+    
+    /* 1. Initial Retracted State (Perfect Circle) */
+    padding: 0.8rem;
+    border-radius: 50px;
+    max-width: 50px;
+    overflow: hidden;
+    
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--text-main);
+    
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px) scale(0);
+    
+    transition: all 0.3s ease-in;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.central-popup span {
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    opacity: 0;
+    min-width: 280px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    transition: opacity 0.2s ease-in;
+}
+
+/* Staged Entrance Choreography */
+.central-popup.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    
+    /* 2. Expanded Container State */
+    max-width: 400px;
+    padding: 1rem 1.5rem;
+    border-radius: 20px;
+    
+    transition: 
+        transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+        opacity 0.2s ease-out, 
+        max-width 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.4s,      
+        padding 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.4s, 
+        border-radius 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.4s;
+}
+
+.central-popup.show span {
+    opacity: 1;
+    transition: opacity 0.4s ease-out 0.6s;
+}
+
+.central-popup i {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    flex-shrink: 0;
+    width: 24px;
+    text-align: center;
+}
+
+:root:not([data-theme="light"]) .central-popup i,
+:root:not([data-theme="light"]) .central-popup span {
+    color: #FFFFFF;
+}
+
+/* --- Radial Gesture Menu --- */
+.radial-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    pointer-events: none; /* Let JS handle events */
+    opacity: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: opacity 0.2s;
+}
+
+.radial-menu.active {
+    opacity: 1;
+}
+
+.radial-center {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+.radial-item {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    margin-left: -30px;
+    margin-top: -30px;
+    border-radius: 50%;
+    background: var(--bg-floating);
+    border: 2px solid var(--border-soft);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    color: var(--text-main);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s, box-shadow 0.2s, color 0.2s;
+    transform: translate(0, 0) scale(0);
+}
+
+.radial-item.active-hover {
+    background: var(--lavender-neon);
+    color: #ffffff;
+    transform: translate(var(--final-x), var(--final-y)) scale(1.2) !important;
+    box-shadow: 0 0 20px var(--glow-pulse);
+    border-color: transparent;
+}
+
+.radial-item.disabled {
+    opacity: 0.3;
+    filter: grayscale(100%);
+}
+
+/* --- Promotion Menu Styles --- */
+.promotion-container {
+    position: relative;
+    display: inline-block;
+}
+
+.promotion-menu {
+    position: absolute;
+    left: 50%;
+    display: flex;
+    flex-direction: column; /* Force clean vertical stack */
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 100;
+}
+
+/* White Controls Dropdown matches the stark black panel */
+.white-controls .promotion-menu {
+    background: #000000;
+    border: 1px solid var(--border-soft);
+    bottom: calc(100% + 10px);
+    top: auto;
+    transform: translateX(-50%) translateY(10px) scale(0.95);
+    transform-origin: bottom center;
+}
+
+/* Black Controls Dropdown matches the stark white panel */
+.black-controls .promotion-menu {
+    background: #FFFFFF;
+    border: 1px solid #e0e0e0;
+    bottom: calc(100% + 10px);
+    top: auto;
+    transform: translateX(-50%) translateY(10px) scale(0.95);
+    transform-origin: bottom center;
+}
+
+/* Specific button overrides inside the menu */
+.promotion-menu .capture-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    margin: 0; /* Remove any lingering margins */
+}
+
+.white-controls .promotion-container.active .promotion-menu,
+.black-controls .promotion-container.active .promotion-menu {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+    pointer-events: all;
+}
+
+/* --- Timer Selection Overlay --- */
+.timer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    opacity: 1;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    position: relative;
+    gap: 2rem;
+}
+
+.timer-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.05);
+}
+
+.timer-overlay h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    margin-bottom: 0.5rem;
+}
+
+.player-setup-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.player-input-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0.5rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.input-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.input-avatar.white-avatar {
+    background: #000000;
+    color: #ffffff;
+    border: 1px solid var(--border-soft);
+    box-shadow: inset 0 0 5px rgba(255,255,255,0.2);
+}
+
+.input-avatar.black-avatar {
+    background: #ffffff;
+    color: #000000;
+}
+
+.setup-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.setup-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.setup-subtitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--lavender-soft);
+    letter-spacing: 1px;
+    margin-top: 1rem;
+}
+
+.timer-grid {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.timer-option {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: #ffffff;
+    min-width: 120px;
+}
+
+.timer-option i {
+    font-size: 2.5rem;
+    color: var(--lavender-soft);
+    transition: color 0.3s, transform 0.3s;
+}
+
+.timer-option span {
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.timer-option:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--lavender-neon);
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(140, 82, 255, 0.3);
+}
+
+/* --- Grand Victory Overlay --- */
+.victory-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 5000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.victory-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.victory-window {
+    background: rgba(15, 15, 20, 0.85);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0; /* Squared off architectural look */
+    padding: 6rem 3rem; /* Massively increased padding for an airy feel */
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    transform: scale(1);
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-width: 90%;
+    width: 600px;
+}
+
+.victory-overlay.hidden .victory-window {
+    transform: scale(0.95) translateY(20px);
+}
+
+.victory-window h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: #ffffff;
+    letter-spacing: 4px;
+}
+
+.victory-window h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: #a0a0a0;
+    margin: 0 0 3.5rem 0; /* Increased margin for breathing room */
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.victory-score {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    font-weight: 600;
+    color: var(--lavender-neon);
+    margin: 0 0 4rem 0; /* Increased margin for breathing room */
+}
+
+.play-again-btn {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.2rem 3.5rem; /* Increased padding */
+    font-size: 0.85rem;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    border-radius: 0; /* Squared off */
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.play-again-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--lavender-soft);
+    transform: translateY(-2px);
+}
+
+.play-again-btn i {
+    transition: transform 0.4s ease;
+}
+
+.play-again-btn:hover i {
+    transform: rotate(180deg);
+}
+
+/* --- Theme Transition DOM Fallback --- */
+.theme-fallback-overlay {
+    position: fixed;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    transform: translate(-50%, -50%) scale(1);
+    z-index: 9999;
+    pointer-events: none;
+    transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+}
+
+.theme-fallback-overlay.expand {
+    /* Scale enough to cover a 4K screen from the corner */
+    transform: translate(-50%, -50%) scale(300);
+}
+
+.timer-option:hover i {
+    color: var(--lavender-neon);
+    transform: scale(1.1);
+}
+
+/* Mobile responsive timer grid */
+@media (max-width: 600px) {
+    .timer-grid {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .timer-option {
+        padding: 1.5rem 3rem;
+        flex-direction: row;
+        min-width: 200px;
+        justify-content: center;
+    }
+}
+
+/* --- Player Clock Display --- */
+.player-clock {
+    font-family: 'Inter', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-neutral);
+    background: var(--bg-surface);
+    border: 2px solid var(--border-soft);
+    padding: 0.5rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    cursor: pointer; /* Acts as the "End Turn" button */
+    opacity: 0.5; /* Dim when not active */
+}
+
+.player-clock.active {
+    opacity: 1;
+    color: #ffffff;
+    background: #000000;
+    border-color: var(--lavender-neon);
+    box-shadow: 0 0 20px rgba(140, 82, 255, 0.4), inset 0 2px 10px rgba(0,0,0,0.5);
+    transform: scale(1.05);
+}
+
+[data-theme="light"] .player-clock.active {
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 0 20px rgba(140, 82, 255, 0.4), inset 0 2px 10px rgba(200,200,200,0.5);
+}
+
+.player-clock.low-time {
+    color: #ff4444 !important;
+    border-color: #ff4444 !important;
+    animation: urgentPulse 1s infinite alternate;
+}
+
+@keyframes urgentPulse {
+    from { box-shadow: 0 0 10px rgba(255, 68, 68, 0.2); }
+    to { box-shadow: 0 0 30px rgba(255, 68, 68, 0.6); }
+}
+
+/* Adjust dashboard spacing for clocks */
+.player-name {
+    margin-bottom: 0.5rem;
+}
