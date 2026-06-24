@@ -1,5 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
     let score = 0; // Positive = White winning, Negative = Black winning
+    let activeTransition = null; // Track view transitions to prevent InvalidStateError
+
+    // Helper to safely execute view transitions without throwing errors
+    function safeViewTransition(callback) {
+        if (!document.startViewTransition || activeTransition) {
+            callback();
+            return;
+        }
+        try {
+            activeTransition = document.startViewTransition(() => {
+                callback();
+            });
+            activeTransition.finished.finally(() => {
+                activeTransition = null;
+            }).catch(() => {});
+        } catch (e) {
+            callback();
+        }
+    }
     
     // DOM Elements
     const whiteFill = document.getElementById('white-fill');
@@ -104,14 +123,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add a class so CSS knows we are doing a theme wipe
         document.documentElement.classList.add('theme-transitioning');
 
-        const transition = document.startViewTransition(() => {
+        safeViewTransition(() => {
             toggleTheme(icon);
         });
 
-        // Clean up the class after everything (including delayed animations) finishes
-        transition.finished.then(() => {
+        // The safeViewTransition wrapper handles the callback instantly or via the API,
+        // but we need to ensure the class is removed. We can just use a timeout fallback
+        // since the actual transition promise is abstracted.
+        setTimeout(() => {
             document.documentElement.classList.remove('theme-transitioning');
-        });
+        }, 1000);
     });
 
     function toggleTheme(icon) {
@@ -425,17 +446,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Fluid Orientation/Resize Animation Logic ---
     const checkLayout = () => {
         // Apply mobile layout if the window is narrow.
-        const isNarrow = window.innerWidth <= 1000;
+        const isNarrow = window.innerWidth <= 1024;
         const currentlyMobile = document.body.classList.contains('mobile-layout');
 
         if (isNarrow !== currentlyMobile) {
-            if (document.startViewTransition) {
-                document.startViewTransition(() => {
-                    document.body.classList.toggle('mobile-layout', isNarrow);
-                });
-            } else {
+            safeViewTransition(() => {
                 document.body.classList.toggle('mobile-layout', isNarrow);
-            }
+            });
         }
     };
 

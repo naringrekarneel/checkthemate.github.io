@@ -1,4 +1,8 @@
 /* --- CSS Variables (Design System) --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 :root {
     /* Dark Theme (Default) */
     --bg-main: linear-gradient(-45deg, #050505, #1E0D3F, #0A0A0A, #2A1555);
@@ -332,7 +336,7 @@ body {
 
 .player-name {
     font-family: 'Cinzel', serif;
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
     font-weight: 800;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -614,8 +618,10 @@ body {
 }
 
 /* --- View Transition Anchors (For fluid orientation changes) --- */
-.white-player { view-transition-name: white-avatar; }
-.black-player { view-transition-name: black-avatar; }
+.player-avatar.white-player { view-transition-name: white-avatar; }
+.player-name.white-player { view-transition-name: white-name; }
+.player-avatar.black-player { view-transition-name: black-avatar; }
+.player-name.black-player { view-transition-name: black-name; }
 .advantage-track { view-transition-name: adv-track; }
 .advantage-indicator { view-transition-name: adv-ind; }
 .white-controls { view-transition-name: white-ctrl; }
@@ -670,30 +676,7 @@ body {
     100% { opacity: 1; }
 }
 
-/* --- Force Landscape Rotation (Mobile Touch Devices Only) --- */
-#landscape-wrapper {
-    width: 100vw;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-
-@media (orientation: portrait) and (pointer: coarse) {
-    #landscape-wrapper {
-        transform: rotate(-90deg);
-        transform-origin: center center;
-        width: 100vh;
-        height: 100vw;
-        top: 50%;
-        left: 50%;
-        margin-top: -50vw;
-        margin-left: -50vh;
-        overflow: hidden;
-    }
-}
+/* Removed legacy #landscape-wrapper */
 
 /* --- Mobile Responsive (Face-to-Face Layout) --- */
 body.mobile-layout {
@@ -827,12 +810,11 @@ body.mobile-layout .player-avatar.large-avatar {
 }
 
 body.mobile-layout .player-name {
-    font-size: 1.2rem;
     padding: 0.1rem 0.5rem;
 }
 
 body.mobile-layout .player-clock {
-    font-size: 2.2rem;
+    /* Font size scales via clamp() */
 }
 
 body.mobile-layout .captured-pieces {
@@ -1410,7 +1392,7 @@ body.mobile-layout .reset-btn {
 /* --- Player Clock Display --- */
 .player-clock {
     font-family: 'Inter', monospace;
-    font-size: 2rem;
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
     font-weight: 700;
     color: var(--text-neutral);
     background: var(--bg-surface);
@@ -1453,4 +1435,53 @@ body.mobile-layout .reset-btn {
 /* Adjust dashboard spacing for clocks */
 .player-name {
     margin-bottom: 0.5rem;
+}
+
+/* --- Comprehensive Responsive Breakpoints --- */
+
+@media (max-width: 480px) {
+    /* Ensure capture controls do not overflow on extremely narrow phones (like iPhone SE) */
+    .capture-controls > .capture-btn,
+    .capture-controls > .promotion-container > .capture-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+    body.mobile-layout .capture-btn, 
+    body.mobile-layout .reset-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+    body.mobile-layout .advantage-indicator {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 1024px) {
+    /* Tablet scale for face-to-face mobile layout */
+    body.mobile-layout .player-avatar.large-avatar {
+        width: 75px;
+        height: 75px;
+        font-size: 2.5rem;
+    }
+}
+
+@media (min-width: 1440px) {
+    /* Large Desktop Support */
+    .app-container {
+        max-width: 1500px;
+    }
+    .player-avatar.large-avatar {
+        width: 120px;
+        height: 120px;
+        font-size: 4rem;
+    }
+    .capture-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.8rem;
+    }
 }
